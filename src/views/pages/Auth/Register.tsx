@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
-// import useRegister from "./hooks/useRegister";
+import useRegister from "./hooks/useRegister";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -18,7 +18,7 @@ const Register = () => {
   const navigate = useNavigate();
   const tokenExists = !!sessionStorage.getItem("token");
 
-//   const { mutate: registerUser, isPending: registerLoading } = useRegister();
+  const { mutate: registerUser, isPending: registerLoading } = useRegister();
 
   const defaultValues = {
     firstName: "",
@@ -30,7 +30,7 @@ const Register = () => {
   const {
     control,
     formState: { errors },
-    // handleSubmit,
+    handleSubmit,
   } = useForm({
     defaultValues,
     mode: "onChange",
@@ -45,14 +45,14 @@ const Register = () => {
     ),
   });
 
-//   const onSubmit = async (values: User) => {
-//     registerUser({
-//       firstName: values.firstName,
-//       lastName: values.lastName,
-//       username: values.username.trim(),
-//       password: values.password,
-//     });
-//   };
+  const onSubmit = async (values: User) => {
+    registerUser({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      username: values.username.trim(),
+      password: values.password,
+    });
+  };
 
   useEffect(() => {
     if (tokenExists) {
@@ -73,8 +73,7 @@ const Register = () => {
         }}
       >
         <Card style={{ maxWidth: "70vw" }}>
-          {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-          <form onSubmit={() => {}}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <CardContent>
               <Grid container spacing={1}>
                 <Grid style={{ width: "100%" }}>
@@ -150,15 +149,13 @@ const Register = () => {
             <CardActions style={{ justifyContent: "space-around" }}>
               <Button
                 variant="contained"
-                // disabled={registerLoading}
-                disabled={true}
+                disabled={registerLoading}
                 type="submit"
               >
                 Register
               </Button>
               <Button
-                // disabled={registerLoading}
-                disabled={true}
+                disabled={registerLoading}
                 onClick={() => navigate("/login")}
               >
                 Log in

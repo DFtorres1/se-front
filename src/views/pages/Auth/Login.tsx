@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
-// import useAuthentication from "./hooks/useAuthenticate";
+import useAuthentication from "./hooks/useAuthenticate";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -18,8 +18,8 @@ const Login = () => {
   const navigate = useNavigate();
   const tokenExists = !!sessionStorage.getItem("token");
 
-  //   const { mutate: authenticateUser, isPending: authLoading } =
-  //     useAuthentication();
+  const { mutate: authenticateUser, isPending: authLoading } =
+    useAuthentication();
 
   const defaultValues = {
     username: "",
@@ -29,7 +29,7 @@ const Login = () => {
   const {
     control,
     formState: { errors },
-    // handleSubmit,
+    handleSubmit,
   } = useForm({
     defaultValues,
     mode: "onChange",
@@ -42,12 +42,12 @@ const Login = () => {
     ),
   });
 
-  //   const onSubmit = async (values: LoginObjectModel) => {
-  //     authenticateUser({
-  //       username: values.username.trim(),
-  //       password: values.password,
-  //     });
-  //   };
+  const onSubmit = async (values: LoginObjectModel) => {
+    authenticateUser({
+      username: values.username.trim(),
+      password: values.password,
+    });
+  };
 
   useEffect(() => {
     if (tokenExists) {
@@ -68,8 +68,7 @@ const Login = () => {
         }}
       >
         <Card>
-          {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-          <form onSubmit={() => {}}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <CardContent>
               <Grid container spacing={1}>
                 <Grid style={{ width: "100%" }}>
@@ -109,13 +108,11 @@ const Login = () => {
               </Grid>
             </CardContent>
             <CardActions style={{ justifyContent: "space-around" }}>
-              {/* <Button variant="contained" disabled={authLoading} type="submit"> */}
-              <Button variant="contained" disabled={true} type="submit">
+              <Button variant="contained" disabled={authLoading} type="submit">
                 Log in
               </Button>
               <Button
-                // disabled={authLoading}
-                disabled={true}
+                disabled={authLoading}
                 onClick={() => navigate("/register")}
               >
                 Register

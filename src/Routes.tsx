@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import LoadingScreen from "./shared/components/LoadingScreen";
 import { useValidateContext } from "./shared/utils/customHooks";
 import Layout from "./shared/components/Layout";
-// import GuardId from "./shared/components/GuardId";
+import GuardId from "./shared/components/GuardId";
 
 const routesConfig: RoutesType[] = [
   {
@@ -30,8 +30,8 @@ const routesConfig: RoutesType[] = [
   {
     id: "root",
     exact: true,
-    // guard: GuardId(),
-    // layout: Layout,
+    guard: GuardId(),
+    layout: Layout,
     path: "/",
     component: lazy(() => import("src/views/pages/Expert/Expert")),
   },

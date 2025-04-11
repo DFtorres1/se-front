@@ -7,15 +7,19 @@ import {
   CardContent,
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
+import { MdLogout } from "react-icons/md";
 import * as yup from "yup";
 import useEvaluateExpert, {
   EvaluateFormInputs,
 } from "./hooks/useEvaluateExpert";
+import { removeSessionToken } from "src/shared/utils/functions";
+import { useNavigate } from "react-router-dom";
 
 // Opciones para cada selector
 const faceTypeOptions = [
@@ -50,6 +54,8 @@ const schema = yup.object().shape({
 });
 
 const EvaluateExpert = () => {
+  const navigate = useNavigate();
+
   const {
     control,
     handleSubmit,
@@ -65,6 +71,11 @@ const EvaluateExpert = () => {
   });
 
   const { mutate: evaluateExpert, isPending } = useEvaluateExpert();
+
+  const handleLogOut = () => {
+    removeSessionToken();
+    navigate("/login");
+  };
 
   const onSubmit = (values: EvaluateFormInputs) => {
     evaluateExpert(values, {
@@ -93,6 +104,18 @@ const EvaluateExpert = () => {
       <Card sx={{ maxWidth: "600px", width: "90%" }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>
+            <IconButton
+              aria-label="close"
+              onClick={handleLogOut}
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 12,
+                color: "#CCCCCC",
+              }}
+            >
+              <MdLogout />
+            </IconButton>
             <Grid container spacing={2}>
               {/* Selector para Tipo de Rostro */}
               <Grid>
@@ -155,7 +178,9 @@ const EvaluateExpert = () => {
               {/* Selector para Largo de Cabello */}
               <Grid>
                 <FormControl fullWidth error={!!errors.hairLength}>
-                  <InputLabel id="hairLength-label">Largo de cabello</InputLabel>
+                  <InputLabel id="hairLength-label">
+                    Largo de cabello
+                  </InputLabel>
                   <Controller
                     name="hairLength"
                     control={control}
